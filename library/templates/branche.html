@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    branches
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-5" style="height: 800px;">
+  <div class="row">
+    {% for athr in authr %}
+      <div class="col-sm-3">
+      <h3>{{athr.AName}}</h3>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+{% endblock %}

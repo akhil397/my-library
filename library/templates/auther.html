@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    auther
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-5" style="height: 800px;">
+  <div class="row">
+    {% for author_name in author_names %}
+      <div class="col-sm-3">
+      <a href="{% url 'author_books' author_name.id %}">{{ author_name.author_name }}</a>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+{% endblock %}
+

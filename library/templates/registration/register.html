@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    register
+{% endblock title %}
+    
+{% block content %}
+
+<div class="container p-5 my-5 bg-dark text-white text-center ">REGISTER</div>
+<div class="container mt-5">
+<form class="row g-3" method="POST">
+           {% csrf_token %}
+           <div class="col-md-6">
+            <label for="inputEmail4" class="form-label">First Name</label>
+            <input type="text" class="form-control">
+          </div>
+          <div class="col-md-6">
+            <label for="inputPassword4" class="form-label">Last Name</label>
+            <input type="text" class="form-control" >
+          </div>    
+          <div class="col-12">
+            <label for="username" class="form-label">username</label>
+            <input type="text" name="username" class="form-control" id="user"><br>
+          </div>
+          <div class="col-12">
+            <label for="email" class="form-label">email</label>
+            <input type="email" name="email" id="email" class="form-control"><br>
+          <div class="col-12">
+
+            <label for="password" class="form-label">password</label>
+            <input type="password" name="password" id="pass" class="form-control"><br>
+          </div>
+
+          <div class="col-12">
+
+            <label for="cpassword" class="form-label">conform password</label>
+            <input type="password" name="confirm_password" class="form-control"><br>
+          </div>
+
+          <div class="col-12">
+
+            <button type="submit" name="Submit" class="btn btn-primary">login</button>
+            <button type="reset" class="btn btn-primary">reset</button>
+         </div>
+
+        </form>
+    </div>
+{% endblock %}
