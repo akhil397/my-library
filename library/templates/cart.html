@@ -1,0 +1,122 @@
+
+{% extends 'base.html' %}
+{% block content %}
+{%load static%}
+
+<head>
+  <!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script> -->
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link rel="stylesheet" href="{% static 'css/cart.css'%}">
+  <script type="text/javascript">
+    var user='{{request.user}}'
+    function getToken(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
+  const csrftoken = getToken('csrftoken');
+  </script>
+
+
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+  </style>
+</head>
+<br><br>
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Cart Items</h6>
+    </div>
+    <table class="table table-hover table-bordered" id="dev-table">
+      <thead>
+        <tr>
+
+          <th>Items</th>
+          <th>Total</th>
+          
+        </tr>
+      </thead>
+      
+      <tr>
+
+        <td>{{cn}}</td>
+        <td>{{t|floatformat:2}}</td>
+        
+        
+      </tr>
+    </table>
+  </div>
+  <br>
+  <div class="box-element">
+    <div class="cart-row">
+        <div style="flex:2;"></div>
+        <div style="flex:2;"><strong>Item</strong></div>
+        <div style="flex:1;"><strong>Price</strong></div>
+        <div style="flex:1;"><strong>Quantity</strong></div>
+        <div style="flex:1;"><strong>Total</strong></div>
+
+    </div>
+
+    {% for item in ci%}
+
+    <div class="cart-row">
+        <div style="flex:2;"><img class="row-image" src="{{item.prodt.book_image.url}}" alt="image"></div>
+        <div style="flex:2;">{{item.prodt.book_name}}</div>
+        <div style="flex:1;"><span>{{item.prodt.book_price|floatformat:2}}</span></div>
+        <div style="flex:1;">
+            <p class="quantity">{{item.quan}}</p>
+            <div class="quantity">
+                <img data-product={{item.prodt.id}} data-action="add" class="chg-quantity update-cart" 
+                src="{% static 'images/arrowup1.png'%}" alt="arrowup">
+
+                <img data-product={{item.prodt.id}} data-action="remove" class="chg-quantity update-cart" 
+                src="{% static 'images/arrowdown.png'%}" alt="arrowdown">
+            </div>
+        </div>
+
+        <div style="flex:1;">{{item.get_total|floatformat:2}}</div>
+
+        <!-- <div style="flex:1"><a class="btn btn-danger btn-xs" style="border-radius: 0%;" href=""><span class="glyphicon glyphicon-trash"></span></a></div> -->
+
+    </div>
+    {% endfor%}
+
+  </div>
+</div>
+<br>
+<br>
+
+<div style="text-align:center;" >
+    <a class="btn btn-success" href="{%url 'checkout'%}">Checkout</a>
+</div>
+
+
+
+<br><br><br><br><br><br>
+
+<script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+<script src="{%static 'js/cart.js'%}"></script>
+{% endblock content %}

@@ -7,12 +7,28 @@
 {% block content %}
 <div class="container mt-5" style="height: 800px;">
   <div class="row">
-    {% for author_name in author_names %}
-      <div class="col-sm-3">
-      <a href="{% url 'author_books' author_name.id %}">{{ author_name.author_name }}</a>
-      </div>
-      {% endfor %}
+    <div class="col align-self-center">
+      Select your favorite auther here
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+         Auther name
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          {% for author_name in author_names %}
+          <li><a class="dropdown-item" href="{% url 'author_books' author_name.id %}">{{ author_name.author_name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div> 
   </div>
+  <div class="row">
+    {% include 'author_books.html' %}
+  </div>
+    <!-- { for author_name in author_names }
+      <div class="col-sm-3">
+      <a href="{url 'author_books' author_name.id }">{{ author_name.author_name }}</a>
+      </div>
+      { endfor }
+  </div> -->
 </div>
 {% endblock %}
 

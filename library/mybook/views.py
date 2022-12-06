@@ -1,11 +1,12 @@
-from multiprocessing import context
 from django.shortcuts import render, redirect
 from mybook.models import Author, Book
-from mybook.forms import Purchaseform
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
-# user book pass 12345
+from fillform import views
+from django.contrib.auth import login as auth_login,authenticate
+
+# user winner pass ?
+# user good pass 12345
 # Create your views here.
 
 
@@ -15,11 +16,14 @@ def home(request):
 
 def login(request):
     if request.method == 'POST':
-        username = request.POST['username']
+        user = request.POST['username']
         password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        auth_user = (request, user)
-        return redirect('/')
+        user = authenticate(username=user, password=password)
+        
+        if user is not None:
+            
+            auth_login(request,user)
+            return redirect('formview')
     return render(request, 'registration/login.html')
 
 
@@ -51,36 +55,23 @@ def register(request):
         return render(request, 'registration/register.html', {'messages': messages})
 
 
+
+
+
 def view_authors(request):
     author_names = Author.objects.all()
     return render(request, 'auther.html', {"author_names": author_names})
 
 def author_books(request, id):
     author_name = Author.objects.get(id=id)
-    author_books = Book.objects.filter(author_name=author_name)
+    author_books = Book.objects.filter(book_author=author_name)
     return render(request, 'author_books.html', {
         
         "author_books": author_books
         })
 
-def view_books(request):
-    books = Book.objects.all()
-    return render(request, 'books.html', {'books': books})
 def despatch(request):
     return render(request, 'despatch.html')
-
-
-def purchase(request):
-    if request.method == 'POST':
-        pform = Purchaseform(request.POST)
-        if pform.is_valid():
-            pform.save()
-            return redirect('despatch',)  # despach
-        else:
-            messages.info(request, 'Fill form Mantory')
-        context['form'] = pform
-
-    return render(request, 'purchase.html', context)
 
 def branche(request):
     return render(request, 'branche.html')

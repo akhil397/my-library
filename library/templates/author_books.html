@@ -1,18 +1,14 @@
-{% extends 'base.html' %}
 
-{% block title %}
-    auther
-{% endblock title %}
-
-{% block content %}
 <div class="container mt-5" style="height: 800px;">
   <div class="row">
     {% for author_book in author_books %}
-      <div class="col-sm-3">
-      <a href="{% url 'view_books' %}">{{ author_book.book_name }}</a>
+    <div class="col-sm-3">
+      <img src="{{author_book.book_image.url}}" alt="" srcset="">
+      <h3>{{ author_book.book_name }}</h3>
+      <p>{{ author_book.book_author }}</p>
+      <a href="{% url 'addcart' author_book.id %}" class="tm-btn tm-btn-1 tm-link-to-services">Add to cart</a>
       </div>
       {% endfor %}
   </div>
 </div>
-{% endblock %}
 

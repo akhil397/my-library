@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% block content %}
+{%load static%}
+
+<head>
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+  <link rel="stylesheet" href="{% static 'css/cart.css'%}">
+
+  <!-- <script type="text/javascript">
+    var user='{{request.user}}'
+
+    function getToken(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+              const cookie = cookies[i].trim();
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
+  const csrftoken = getToken('csrftoken');
+  </script>
+   -->
+  <style media="screen">
+    a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+  </style>
+</head>
+<br><br>
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Details</h6>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="box-element" id="form-wrapper">
+              <button type="button" class="btn btn-success"><a href="{% url 'processOrder' %}">Buy now</a></button>
+            </div>
+
+            <br>
+            
+            <div style="text-align:center" class="box-element hidden" id="payment-info">
+                <button style="background-color:green;color:white;border-radius:4px;" id="make-payment">Place  Order</button>
+
+            </div>
+          
+
+        
+        </div>
+
+        <div class="col-lg-6">
+            <div class="box-element">
+                <a class="btn btn-outline-dark" href="{%url 'cartDetails'%}">Back</a>
+
+                <hr>
+                <h3>Order Summary</h3>
+                <hr>
+
+                {% for item in items%}
+
+                <div class="cart-row">
+                    <div style="flex:2;"><img class="row-image" src="{{ item.prodt.book_image.url}}" alt=""></div>
+                    <div style="flex:2;"><p>{{item.prodt.book_name}}</p></div>
+                    <div style="flex:1;"><p>{{item.prodt.book_price|floatformat:2}}</p></div>
+                    <div style="flex:1;"><p>x{{item.quan}}</p></div>
+
+                </div>
+
+                {%endfor%}
+
+                <h5>Items: {{order.get_cart_items}}</h5>
+            <h5>Total :{{order.get_cart_total}}</h5>
+
+
+            </div>
+            
+
+
+        </div>
+
+    </div>
+    
+
+  </div>
+</div>
+<br>
+<br>
+
+<script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+
+<script type="text/javascript">
+   var form = document.getElementById('form')
+
+   var total='{{order.get_cart_total|floatformat:2}}'
+
+   form.addEventListener('submit',function(e){
+    e.preventDefault()
+    console.log('form submitted')
+
+    document.getElementById('form-button').classList.add('hidden')
+
+    document.getElementById('payment-info').classList.remove('hidden')
+
+   })
+
+   document.getElementById('make-payment').addEventListener('click',function(e){
+    submitFormData()
+   })
+
+
+
+   function submitFormData(){
+    console.log('payment button')
+
+    var userFormData={
+      'name':null,
+      'email':null,
+      'total':total
+
+    }
+    var shippingInfo={
+      'address':null,
+      'city':null,
+      'state':null,
+      'pincode':null
+      
+    }
+
+    userFormData.name=form.name.value
+    userFormData.email=form.email.value
+
+    shippingInfo.address=form.address.value
+    shippingInfo.city=form.city.value
+    shippingInfo.state=form.state.value
+    shippingInfo.pincode=form.pincode.value
+
+    var  url='/cart/process-order'
+
+   fetch(url,{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'X-CSRFToken':csrftoken
+    },
+    body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo})
+   })
+   .then((response) => response.json())
+   .then((data)=>{
+    console.log('success',data)
+    alert('Order placed Succcesfully')
+    window.location.href="{%url 'home'%}"
+   })
+   }
+
+   
+
+   
+
+</script>
+
+
+<br><br><br><br><br><br>
+{% endblock content %}
