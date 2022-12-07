@@ -1,15 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 {%load static%}
-
+<section style="height: 1400px; border: 10px solid red;">
 <head>
-  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
   <link rel="stylesheet" href="{% static 'css/cart.css'%}">
 
-  <!-- <script type="text/javascript">
+  <script type="text/javascript">
     var user='{{request.user}}'
 
     function getToken(name) {
@@ -29,7 +25,7 @@
   }
   const csrftoken = getToken('csrftoken');
   </script>
-   -->
+  
   <style media="screen">
     a:link {
       text-decoration: none;
@@ -54,7 +50,77 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="box-element" id="form-wrapper">
-              <button type="button" class="btn btn-success"><a href="{% url 'processOrder' %}">Buy now</a></button>
+                <form action="" id="form" >
+                    <div id="user-info">
+                        <div class="form-field  ">
+                            <input required class="form-control" type="text" name="customer" placeholder="Name">
+                        </div>
+                        <br>
+              
+
+                        <div class="form-field ">
+                            <input required class="form-control" type="email" name="CMail" placeholder="Email">
+                        </div>
+                        <br>
+
+                    </div>
+                    <div id="shipping-info">
+                        <hr>
+                        <p>Shipping Information</p>
+                        <hr>
+                        <div class="form-field ">
+                            <input required class="form-control" type="text" name="adrs" placeholder="Address">
+                        </div>
+                        <br>
+                        <div class="form-field ">
+                          <input required class="form-control" type="text" name="CPhone" placeholder="Pone number">
+                      </div>
+                      <br>
+                      <div class="form-field ">
+                        <input required class="form-control" type="text" name="BName" placeholder="Bank Name">
+                    </div>
+                      <br>
+                        <div class="form-field ">
+
+                          
+                        
+                          <select  class="form-select form-control"  name="CDistric" >
+                            <option disabled selected="true"> Select District</option>
+                            {%for dct in districts%}
+                            
+                            <option value="{{dct.DICSTRINM}}">{{dct.DICSTRINM}}</option>
+                            {%endfor%}
+                          </select>
+
+                        
+                      </div>
+                      <br>
+                        <div class="form-field ">
+                          <select class="form-select form-control"  name="CBranch" >
+                            <option value="" >Select Branche</option>
+                              {% for branche in branches %}
+                              <option value="{{branche.BRANCHNM}}">{{ branche.BRANCHNM }}</option>
+                              {% endfor %}
+                           
+                           
+                          </select>
+                        </div>
+                        <br>
+
+                        <div class="form-field  ">
+                            <input required class="form-control" type="text" name="pincode" placeholder="PinCode">
+                        </div>
+                        <br>
+
+
+                    </div>
+                    <hr>
+
+                    <div style="text-align:center;">                    
+                    <input id="form-button" class="btn btn-success" type="submit" value="Continue">
+                </div>
+                </form>
+
             </div>
 
             <br>
@@ -106,13 +172,18 @@
 <br>
 <br>
 
-<script src="http://netdna.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+
+
+
 
 
 <script type="text/javascript">
    var form = document.getElementById('form')
 
    var total='{{order.get_cart_total|floatformat:2}}'
+
+   var car_quant='{{order.get_cart_items}}'
 
    form.addEventListener('submit',function(e){
     e.preventDefault()
@@ -134,26 +205,35 @@
     console.log('payment button')
 
     var userFormData={
-      'name':null,
-      'email':null,
-      'total':total
+      'customer':null,
+      'CMail':null,
+      'total':total,
+      'cart_quant':car_quant
 
     }
     var shippingInfo={
-      'address':null,
-      'city':null,
-      'state':null,
-      'pincode':null
+      'adrs':null,
+      'CBranch':null,
+      'CPhone':null,
+      'pincode':null,
+      'CDistric':null,
+      'BName':null,
+
       
     }
 
-    userFormData.name=form.name.value
-    userFormData.email=form.email.value
+    userFormData.customer=form.customer.value
+    userFormData.CMail=form.CMail.value
 
-    shippingInfo.address=form.address.value
-    shippingInfo.city=form.city.value
-    shippingInfo.state=form.state.value
+    shippingInfo.adrs=form.adrs.value
+    shippingInfo.CPhone=form.CPhone.value
+    shippingInfo.CBranch=form.CBranch.value
     shippingInfo.pincode=form.pincode.value
+    shippingInfo.CDistric=form.CDistric.value
+    shippingInfo.BName=form.BName.value
+
+    console.log(userFormData)
+    console.log(shippingInfo)
 
     var  url='/cart/process-order'
 
@@ -180,5 +260,9 @@
 </script>
 
 
+
+
+
 <br><br><br><br><br><br>
+</section>
 {% endblock content %}

@@ -21,9 +21,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('mybook.urls')),
-    path('form/', include('fillform.urls')),
     path('cart/', include('cartpage.urls')),
-    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

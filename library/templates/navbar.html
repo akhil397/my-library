@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="{% url 'home' %}">icon</a>
+    <a class="navbar-brand" href="{% url 'home' %}"><i class="fa-solid fa-book-open-cover"></i></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -9,12 +9,13 @@
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="{% url 'home' %}">HOME</a>
         </li>
+        
         {% if user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'logout' %}">Logout</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'despach' %}">DESPACH</a>
+          <a class="nav-link" href="{% url 'despatch' %}">DESPACH</a>
         </li>
         {% else %}
         <li class="nav-item">
@@ -27,25 +28,69 @@
         <li class="nav-item">
           <a class="nav-link " href="{% url 'cartDetails' %}"><i class="fa fa-shopping-cart" ></i> ({{ cn }})</a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            BRANCHS
+        <!-- <li class="nav-item dropdown">
+          <a class="nav-link active" aria-current="page" href="{% url 'branch' %}">BRANCH</a>
+        </li> -->
+        <li class="nav-item dropdown" >
+
+          <form action="" method="POST" id="load_districts" data-load-branches="load-branches">
+          <!-- <a class="nav-link dropdown-toggle" href="{% url 'branch' %}" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            BRANCH
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
+            {% for ar in bjs %} 
+            <li><a class="dropdown-item" href="{% url 'branches' ar.id %}">{{ar.DICSTRINM}}</a></li>      
+            {% endfor %}
+          </ul> -->
+          <select  name="district" id="districtID" class="form-control form-select" >
+            <option disabled selected="true"> Select District</option>
+            {%for dct in districts%}
+
+            <option value="{{dct.id}}">{{dct.DICSTRINM}}</option>
+            {%endfor%}
+          </select>
+
+          
+
+         </form>
+
         </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true"></a>
+
+        <li class="nav-item dropdown" style="margin-left:20px;">
+          <select  name="branche"  id="brancheID" class="form-control form-select" >
+            <option disabled selected="true"> Select Branche</option>
+
+
+          </select>
         </li>
+        
       </ul>
-      <form class="d-flex">
+      <form class="d-flex" action="{% url 'searching' %}">
         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
+        <button class="btn btn-outline-success" type="submit" placeholder="Enter item name to search" name="q">Search</button>
       </form>
     </div>
   </div>
 </nav>
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+      $("#districtID").change(function () {
+        var url = $("#load_districts").attr("data-load-branches");  // get the url of the `load_courses` view
+        var districtId = $(this).val(); 
+        
+        console.log(districtId)// get the selected programming ID from the HTML input
+  
+        $.ajax({                       // initialize an AJAX request
+          url: url,                    // set the url of the request (= localhost:8000/load-courses/)
+          data: {
+            'district': districtId       // add the programming id to the GET parameters
+          },
+          success: function (data) {   // `data` is the return of the `load_courses` view function
+            $("#brancheID").html(data);  // replace the contents of the course input with the data that came from the server
+          }
+        });
+  
+      });
+    </script>

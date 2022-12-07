@@ -1,14 +1,24 @@
+{% extends 'base.html' %}
 
-<div class="container mt-5" style="height: 800px;">
+{% block title %}
+    auther
+{% endblock title %}
+
+{% block content %}
+<section style="height: 1400px; border: 10px solid red;">
+<div class="container mt-5">
   <div class="row">
     {% for author_book in author_books %}
-    <div class="col-sm-3">
-      <img src="{{author_book.book_image.url}}" alt="" srcset="">
-      <h3>{{ author_book.book_name }}</h3>
-      <p>{{ author_book.book_author }}</p>
-      <a href="{% url 'addcart' author_book.id %}" class="tm-btn tm-btn-1 tm-link-to-services">Add to cart</a>
-      </div>
+    <div class="card mx-5 my-3" style="width: 18rem;">
+      <img class="card-img-top" src="{{author_book.book_image.url}}" alt="" style="height: 200px;">
+      <h2  class="card-title" style="height: 76.8px;">{{ author_book.book_name }}</h2>
+      <p  class="card-text">{{ author_book.book_author }}</p>
+      <h1 class="card-text text-danger">{{author_book.book_price}}</h1>
+      <a href="{% url 'addcart' author_book.id %}" class="btn btn-dark mb-0">Add to cart</a>
+    </div>
       {% endfor %}
   </div>
 </div>
+</section>
+{% endblock %}
 

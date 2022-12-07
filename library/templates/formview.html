@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+{%load static%}
+<section style="height: 1400px; border: 10px solid red;">
+  <div class="container p-5 my-5 bg-dark text-white text-center ">CUSTEMER DEATAILS</div>
+
+  <div class="container mt-5">
+    <form class="row g-3" method="POST">
+      {% csrf_token %}
+               <div class="col-md-6">
+                <label for="customer" class="form-label">User Name  :</label>
+                <input type="text" class="form-control" name="customer">
+              </div>
+              <div class="col-md-6">
+                <label for="CName" class="form-label">Custemer Name  :</label>
+                <input type="text" class="form-control" name="CName">
+              </div>    
+              <div class="col-md-6">
+                <label for="CPhone" class="form-label">Phone Number :</label>
+                <input type="tel" name="CPhone" class="form-control" ><br>
+              </div>
+              <div class="col-md-6">
+                <label for="CMail" class="form-label">email</label>
+                <input type="email" name="CMail" class="form-control"><br>
+              </div>
+              <div class="col-12">
+    
+                <label for="CAddress" class="form-label">Custemer Address</label>
+                <input type="text" name="CAddress" class="form-control"><br>
+              </div>
+              <div class="col-md-6">
+                <label for="Ddate" class="form-label">District of Custemer :</label>
+                <input type="text" name="CDistric" class="form-control"><br>
+              </div>
+              <div class="col-md-6">
+                <label for="Ddate" class="form-label">Branch of Custemer :</label>
+                <input type="text" name="CBranch" class="form-control"><br>
+              </div>
+              <div class="col-md-4"> 
+                <label for="CZipcode" class="form-label">Zipcode :</label>
+                <input type="number" name="CZipcode" class="form-control"><br>
+              </div>
+              <div class="col-md-4">
+                <label for="Ddate" class="form-label">Date of Delivery :</label>
+                <input type="date" name="Ddate" class="form-control"><br>
+              </div>
+              
+              <div class="col-md-4">
+                <label for="Ddate" class="form-label">Time of Delivery :</label>
+                <input type="time" name="Dtime" class="form-control"><br>
+              </div>
+    
+              <div class="col-12">
+                <button type="submit" name="Submit" class="btn btn-primary">Submit</button>
+                <button type="reset" class="btn btn-primary">reset</button>
+             </div>
+    
+            </form>
+        </div>
+</section>
+{% endblock content %}

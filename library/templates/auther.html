@@ -5,30 +5,22 @@
 {% endblock title %}
 
 {% block content %}
-<div class="container mt-5" style="height: 800px;">
-  <div class="row">
-    <div class="col align-self-center">
-      Select your favorite auther here
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-         Auther name
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          {% for author_name in author_names %}
-          <li><a class="dropdown-item" href="{% url 'author_books' author_name.id %}">{{ author_name.author_name }}</a></li>
-          {% endfor %}
-        </ul>
-      </div> 
-  </div>
-  <div class="row">
-    {% include 'author_books.html' %}
-  </div>
-    <!-- { for author_name in author_names }
-      <div class="col-sm-3">
-      <a href="{url 'author_books' author_name.id }">{{ author_name.author_name }}</a>
+<section style="height: 800px; border: 10px solid red;">
+  <h1>hi {{user.username}}</h1>
+    <div class="row" style="margin: 50px 50px 50px 50px;">
+      {% for author_name in author_names %}
+      <div class="card mx-5" style="width: 18rem;">
+        <img src="{{ author_name.auther_image.url }}" class="card-img-top" style="height: 200px;">
+        <div class="card-body" style="text-align: center;">
+        <a href="{% url 'author_books' author_name.id %}"><button class="btn btn btn-info">{{ author_name.author_name }}</button></a>
+        </div>
       </div>
-      { endfor }
-  </div> -->
-</div>
+        {% endfor %}
+    </div>
+</section>
+<!-- <div class="col-sm-3">
+  <img src="{{ author_name.auther_image.url }}" alt="">
+<a href="{ url 'author_books' author_name.id }">{{ author_name.author_name }}</a>
+</div> -->
 {% endblock %}
 

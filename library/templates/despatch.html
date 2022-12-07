@@ -5,9 +5,80 @@
 {% endblock title %}
 
 {% block content %}
-<div class="container mt-5" style="height: 800px;">
-  <div class="row">
-<h1>duspach</h1>
+<section style="height: 1400px; border: 10px solid red;">
+<div class="container mt-6">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">My Orders</h6>
+    </div>
+    <table class="table table-hover table-bordered" id="dev-table">
+      <thead>
+        <tr>
+
+          <th>Name</th>
+          <th>order ID</th>
+          <th>Total Items</th>
+          <th>Total Price</th>
+          <th>Address</th>
+          <th>Action</th>
+          
+        </tr>
+      </thead>
+     
+      <tr>
+        {% for order in orders%}
+
+        <td> {{order.customer}}</td>
+        <td>{{order.order.cart_id}}</td>
+        <td>{{order.order.get_cart_items}}</td>
+        <td>{{order.order.get_cart_total}}</td>
+        <td>{{order.CAddress}}</td>
+        
+        <td><a class="btn btn-danger btn-xs" style="border-radius: 0%;" href=""><span class="glyphicon glyphicon-trash"></span></a></td>
+      </tr>
+      {% endfor%}
+     
+    </table>
+  </div>
+
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Ordered Products</h6>
+    </div>
+    <table class="table table-hover table-bordered" id="dev-table">
+      <thead>
+        <tr>
+
+          <th>Product Name</th>
+          <th>Product Price</th>
+          
+          
+        </tr>
+      </thead>
+     
+      <tr>
+        {% for product in products%}
+
+        <td> {{product.prodt.book_name}}</td>
+        <td>{{product.prodt.book_price}}</td>
+        
+      </tr>
+      {% endfor%}
+     
+    </table>
   </div>
 </div>
+
+
+
+<div style="text-align:center;">
+  <a class="btn btn-success" href="">Cash On Delivery</a>
+
+</div>
+
+<div style="text-align:center;padding-top:20px;">
+  <a class="btn btn-success" href="">Pay By RazorPay</a>
+
+</div>
+</section>
 {% endblock %}

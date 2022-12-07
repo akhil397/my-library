@@ -8,6 +8,9 @@
 
 {% block content %}
 <div class="container mt-5 border" style="height: 800px;">
+{% for messeges in messeges %}
+<p>{{messeges}}</p>  
+{% endfor %}
     <h1>Login</h1>
 <form class="row g-3 mx-5" method="POST" style="margin-top: 200px;">
   {% csrf_token %}

@@ -1,3 +1,4 @@
+from email.policy import default
 from pyexpat import model
 from django.db import models
 from mybook.models import Author, Book
@@ -49,14 +50,18 @@ class items(models.Model):
         return total
 
 
-class ShippingAddress(models.Model):
-    customer=models.ForeignKey(User,on_delete=models.SET_NULL,blank=True,null=True)
-    order=models.ForeignKey(cartlist,on_delete=models.SET_NULL,blank=True,null=True)
-    city=models.CharField(max_length=100,default="")
-    adrs=models.CharField(max_length=1000,default="")
-    pincode=models.CharField(max_length=100,default="")
-    state=models.CharField(max_length=100,default="")
-    date_added=models.DateTimeField(auto_now_add=True)
 
+
+class PurchasModel(models.Model):
+    customer=models.ForeignKey(User,on_delete=models.SET_NULL,blank=True,null=True)
+    CName=models.CharField(max_length=30)
+    CPhone=models.CharField(max_length=10)
+    CMail=models.EmailField()
+    CAddress=models.CharField(max_length=50)
+    CDistric=models.CharField(max_length=100,default="")
+    CBranch=models.CharField(max_length=100, default="")
+    CZipcode=models.CharField(max_length=6)
+    Ddate=models.DateField()
+    Dtime=models.TimeField()
     def __str__(self):
-        return f"{self.adrs}"
+         return '{}'.format(self.CName)

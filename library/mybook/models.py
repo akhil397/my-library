@@ -2,7 +2,9 @@ from tkinter import CASCADE
 from tokenize import Name
 from django.db import models
 from django.forms import IntegerField  
-#user booko pasd 2345
+
+
+#user hook pasd 12345
 class District(models.Model):  
     DICSTRINM= models.CharField(max_length=15)  
     def __str__(self):
@@ -34,3 +36,6 @@ class Book(models.Model):
 
     def __str__(self):
          return '{}'.format(self.book_name)
+
+
+

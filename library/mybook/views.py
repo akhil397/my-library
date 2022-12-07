@@ -1,38 +1,43 @@
+from multiprocessing import context
 from django.shortcuts import render, redirect
-from mybook.models import Author, Book
+from mybook.models import Author, Book, District, Branches
+from mybook.forms import Shippingform
 from django.contrib.auth.models import User
 from django.contrib import messages
-from fillform import views
 from django.contrib.auth import login as auth_login,authenticate, logout
+from django.db.models import Q
+from django.http import HttpResponseRedirect
 
-# user winner pass ?
-# user good pass 12345
+from cartpage.models import PurchasModel,items
+# user hook pass 12345
 # Create your views here.
 
 
 def home(request):
-    return render(request, 'home.html')
+    districts=District.objects.all()
+    return render(request, 'home.html',{'districts':districts})
 
 def register(request):
     if request.method == 'POST':
-        username = request.POST['username']
-        email = request.POST['email']
-        password = request.POST['password']
-        confirm_password = request.POST['confirm_password']
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirm_password = request.POST.get('confirm_password')
 
         if password == confirm_password:
             if User.objects.filter(username=username).exists():
-                messages.info(request, 'Username Taken')
+                messages.info(request, 'Username alredy Exits!')
                 return redirect('register')
             elif User.objects.filter(email=email).exists():
-                messages.info(request, 'Email Taken')
+                messages.info(request, 'Email alredy Exits!')
                 return redirect('register')
             else:
-                user = User.objects.create_user(
-                    username=username, email=email, password=password)
-                user.save()
-
-                return redirect('/')
+                data = User.objects.create_user(username=username, email=email, password=password)
+                data.save()
+                messages.success(request,"User Created Successfully!")
+                user = authenticate(username=username,password=password)
+                auth_login(request,user)
+                return redirect('login')
 
         else:
             messages.info(request, 'Password does not match')
@@ -49,12 +54,27 @@ def login(request):
         if user is not None:
             
             auth_login(request,user)
-            return redirect('formview')
+            return redirect('fillform')
     return render(request, 'registration/login.html')
-
 def logout(request):
     authenticate.logout(request)
     return redirect('login')
+def branch(request):
+    brjs = District.objects.all()
+    return render(request, 'branche.html', {'bjs': brjs})
+def branches(request,area):
+    area=District.objects.get(id=area)
+    braju=Branches.objects.filter(DistricNM=area)
+    return render(request, 'branche.html',{'brej':braju})
+
+def fillform(request):
+    if request.method == "POST":
+        form = Shippingform(request.POST)
+        if form.is_valid():
+            form.save()
+    else:
+        form = Shippingform()
+    return render(request,'formview.html',{'frm':form})
 
 def view_authors(request):
     author_names = Author.objects.all()
@@ -68,10 +88,44 @@ def author_books(request, id):
         "author_books": author_books
         })
 
-def despatch(request):
-    return render(request, 'despatch.html')
+def searching(request):
+    prod = None
+    query = None
+    if 'q' in request.GET:
+        query = request.GET.get('q')
+        prod = Book.objects.all().filter(Q(book_name__contains=query)| Q(desc__contains=query))
 
-def branche(request):
-    return render(request, 'branche.html')
+    return render(request, 'search.html', {'qr': query, 'pr': prod})
+def despatch(request):
+    person = User.objects.get(id=request.user.id)
+    my_orders=PurchasModel.objects.all().filter(customer=person)
+
+    orders=[]
+    if len(my_orders)>0:
+        for i in range(len(my_orders)):
+            order=my_orders[i].order
+            orders.append(order)
+        products=items.objects.all().filter(cart__in=orders) 
+    else:
+        products=[]
+
+    return render(request,'despatch.html',{'orders':my_orders,'products':products,})
+
+
+def load_branches(request):
+    districtId=request.GET.get('district')
+
+    print(districtId)
+
+    district=District.objects.get(id=districtId)
+
+    print(district)
+
+    branches=Branches.objects.all().filter(DistricNM=district)
+
+    print(branches)
+    return render(request,"branches.html", {'branches':branches})
+
+
 
 

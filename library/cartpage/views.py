@@ -1,7 +1,8 @@
+from os import name
 from django.shortcuts import render,redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
-from mybook.models import Author, Book
-from cartpage.models import cartlist,items,ShippingAddress
+from mybook.models import Author, Book,District,Branches
+from cartpage.models import cartlist,items,PurchasModel
 from django.core.exceptions import ObjectDoesNotExist
 
 from django.contrib.auth.models import User
@@ -26,7 +27,9 @@ def cart_details(request,total=0,count=0,cart_items=None):
             total += (i.prodt.book_price*i.quan)
             count += i.quan
     except ObjectDoesNotExist:
-        pass
+        ct_items=[]
+        total=0
+        count=0
     return render(request, 'cart.html', {'ci': ct_items, 't': total, 'cn': count})
 
 @login_required(login_url='login')
@@ -65,7 +68,7 @@ def updateItem(request):
     person = User.objects.get(id=request.user.id)
 
     print(person)
-    prod=Book.objects.get(id=productId)
+    #prod=Book.objects.get(id=productId)
     
     ct = cartlist.objects.get(customer=person,complete=False)
     print(ct)
@@ -90,6 +93,10 @@ def updateItem(request):
 def checkout(request):
     person = User.objects.get(id=request.user.id)
 
+    districts=District.objects.all()
+
+    branches=Branches.objects.all()
+
     if person:
         ct= cartlist.objects.get(customer=person,complete=False)
 
@@ -100,33 +107,37 @@ def checkout(request):
     else:
         c_items=[]
         ct={'get_cart_toal':0,'get_cart_items':0}
-    return render(request,"checkout.html",{'items':c_items,'order':ct})
+    return render(request,"checkout.html",{'items':c_items,'order':ct, 'districts':districts,'branches':branches})
 
 
 @login_required(login_url='login')
 def processOrder(request):
-    return render(request,'despatch.html')
-    # transaction_id=datetime.datetime.now().timestamp()
+    transaction_id=datetime.datetime.now().timestamp()
 
-    # data=json.loads(request.body)
+    data=json.loads(request.body)
 
-    # person = User.objects.get(id=request.user.id)
+    person = User.objects.get(id=request.user.id)
+    print(person)
 
-    # if person:
-    #     ct=cartlist.objects.get(customer=person,complete=False)
-    #     total=float(data['form']['total'])
+    if person:
+        ct=cartlist.objects.get(customer=person,complete=False)
+        total=float(data['form']['total'])
+        quantity=data['form']['cart_quant']
+
+
+        print(data,total,quantity)
 
         
 
-    #     ct.complete=True
+        ct.complete=True
 
-    #     ct.save()
+        ct.save()
 
-    #     place=ShippingAddress.objects.create(customer=person,order=ct, adrs=data['shipping']['address'],city=data['shipping']['city'],state=data['shipping']['state'],pincode=data['shipping']['pincode'])
+        place=PurchasModel.objects.create(customer=person,order=ct, CName=data['form']['customer'], CMail=data['form']['CMail'], Bquatity=quantity,Total_Amount=data['form']['total'],  CAddress=data['shipping']['adrs'],CDistric=data['shipping']['CDistric'],CBranch=data['shipping']['CBranch'], CPhone=data['shipping']['CPhone'],CZipcode=data['shipping']['pincode'], BName=data['shipping']['BName'])
 
-    #     place.save()
+        place.save()
 
-    # else:
-    #     print("user is not logged in")
+    else:
+        print("user is not logged in")
 
-    # return JsonResponse('Payment complete',safe=False)
+    return JsonResponse('Payment complete',safe=False)
