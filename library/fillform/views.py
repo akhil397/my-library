@@ -16,4 +16,4 @@ def formview(request):
 
 def despach(request):
     context=PurchasModel.objects.all()
-    return render(request,'despach.html',{"form":context})
+    return render(request,'despatch.html',{"form":context})

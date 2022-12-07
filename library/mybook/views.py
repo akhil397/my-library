@@ -3,7 +3,7 @@ from mybook.models import Author, Book
 from django.contrib.auth.models import User
 from django.contrib import messages
 from fillform import views
-from django.contrib.auth import login as auth_login,authenticate
+from django.contrib.auth import login as auth_login,authenticate, logout
 
 # user winner pass ?
 # user good pass 12345
@@ -12,20 +12,6 @@ from django.contrib.auth import login as auth_login,authenticate
 
 def home(request):
     return render(request, 'home.html')
-
-
-def login(request):
-    if request.method == 'POST':
-        user = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=user, password=password)
-        
-        if user is not None:
-            
-            auth_login(request,user)
-            return redirect('formview')
-    return render(request, 'registration/login.html')
-
 
 def register(request):
     if request.method == 'POST':
@@ -54,9 +40,21 @@ def register(request):
     else:
         return render(request, 'registration/register.html', {'messages': messages})
 
+def login(request):
+    if request.method == 'POST':
+        user = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=user, password=password)
+        
+        if user is not None:
+            
+            auth_login(request,user)
+            return redirect('formview')
+    return render(request, 'registration/login.html')
 
-
-
+def logout(request):
+    authenticate.logout(request)
+    return redirect('login')
 
 def view_authors(request):
     author_names = Author.objects.all()
