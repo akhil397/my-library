@@ -50,77 +50,7 @@
     <div class="row">
         <div class="col-lg-6">
             <div class="box-element" id="form-wrapper">
-                <form action="" id="form" >
-                    <div id="user-info">
-                        <div class="form-field  ">
-                            <input required class="form-control" type="text" name="customer" placeholder="Name">
-                        </div>
-                        <br>
-              
-
-                        <div class="form-field ">
-                            <input required class="form-control" type="email" name="CMail" placeholder="Email">
-                        </div>
-                        <br>
-
-                    </div>
-                    <div id="shipping-info">
-                        <hr>
-                        <p>Shipping Information</p>
-                        <hr>
-                        <div class="form-field ">
-                            <input required class="form-control" type="text" name="adrs" placeholder="Address">
-                        </div>
-                        <br>
-                        <div class="form-field ">
-                          <input required class="form-control" type="text" name="CPhone" placeholder="Pone number">
-                      </div>
-                      <br>
-                      <div class="form-field ">
-                        <input required class="form-control" type="text" name="BName" placeholder="Bank Name">
-                    </div>
-                      <br>
-                        <div class="form-field ">
-
-                          
-                        
-                          <select  class="form-select form-control"  name="CDistric" >
-                            <option disabled selected="true"> Select District</option>
-                            {%for dct in districts%}
-                            
-                            <option value="{{dct.DICSTRINM}}">{{dct.DICSTRINM}}</option>
-                            {%endfor%}
-                          </select>
-
-                        
-                      </div>
-                      <br>
-                        <div class="form-field ">
-                          <select class="form-select form-control"  name="CBranch" >
-                            <option value="" >Select Branche</option>
-                              {% for branche in branches %}
-                              <option value="{{branche.BRANCHNM}}">{{ branche.BRANCHNM }}</option>
-                              {% endfor %}
-                           
-                           
-                          </select>
-                        </div>
-                        <br>
-
-                        <div class="form-field  ">
-                            <input required class="form-control" type="text" name="pincode" placeholder="PinCode">
-                        </div>
-                        <br>
-
-
-                    </div>
-                    <hr>
-
-                    <div style="text-align:center;">                    
-                    <input id="form-button" class="btn btn-success" type="submit" value="Continue">
-                </div>
-                </form>
-
+                
             </div>
 
             <br>

@@ -57,7 +57,6 @@ def login(request):
             return redirect('fillform')
     return render(request, 'registration/login.html')
 def logout(request):
-    authenticate.logout(request)
     return redirect('login')
 def branch(request):
     brjs = District.objects.all()
