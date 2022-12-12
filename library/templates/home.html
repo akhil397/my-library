@@ -38,7 +38,11 @@
       </div>
       <div class="d-grid gap-2 col-4 mx-auto">
         <button type="button" class="btn btn-warning btn-lg btn-outline-info fs-4 text-dark">
+          {% if user.is_authenticated%}
+        <a href="{% url 'fillform' %}"><h1>SHOP HERE</h1></button></a>
+        {%else%}
         <a href="{% url 'login' %}"><h1>SHOP HERE</h1></button></a>
+        {%endif%}
       </div>
       <div class="col-sm-4">
         <h3>Column 3</h3>        

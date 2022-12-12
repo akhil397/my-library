@@ -34,7 +34,7 @@
         <td>{{order.order.get_cart_total}}</td>
         <td>{{order.CAddress}}</td>
         
-        <td><a class="btn btn-danger btn-xs" style="border-radius: 0%;" href=""><span class="glyphicon glyphicon-trash"></span></a></td>
+        <td><a href="{%url 'delete-order' order.id%}"><i class="fas fa-trash"></i></a></td>
       </tr>
       {% endfor%}
      

@@ -51,17 +51,22 @@ class items(models.Model):
 
 
 
-
 class PurchasModel(models.Model):
     customer=models.ForeignKey(User,on_delete=models.SET_NULL,blank=True,null=True)
-    CName=models.CharField(max_length=30)
-    CPhone=models.CharField(max_length=10)
+    order=models.ForeignKey(cartlist,on_delete=models.SET_NULL,blank=True,null=True)
+    CName=models.CharField(max_length=30, blank=True,null=True)
+    CPhone=models.CharField(max_length=10,blank=True,null=True)
     CMail=models.EmailField()
-    CAddress=models.CharField(max_length=50)
-    CDistric=models.CharField(max_length=100,default="")
-    CBranch=models.CharField(max_length=100, default="")
-    CZipcode=models.CharField(max_length=6)
-    Ddate=models.DateField()
-    Dtime=models.TimeField()
+    CAddress=models.CharField(max_length=50,blank=True,null=True)
+    CDistric=models.CharField(max_length=100,default="",blank=True,null=True)
+    CBranch=models.CharField(max_length=100, default="",blank=True,null=True)
+    CZipcode=models.CharField(max_length=6,blank=True,null=True)
+    Bquatity=models.IntegerField(null=True)
+    Ddate=models.DateField(auto_now=False)
+    Dtime=models.TimeField(auto_now=False)
+    Total_Amount=models.CharField(max_length=100,default="",blank=True,null=True)
+    unique_purchase_id=models.CharField(max_length=100,default="",null=True)
     def __str__(self):
          return '{}'.format(self.CName)
+
+

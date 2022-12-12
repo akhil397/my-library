@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 import os
 from pathlib import Path
-from telnetlib import LOGOUT
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -33,14 +33,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    
     'django.contrib.auth',
+    'django.contrib.admin',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mybook',
-    'cartpage'
+    'cartpage',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -74,7 +76,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'library.wsgi.application'
 
 
-LOGIN_REDIRECT_URL='/afterlogin'
+#LOGIN_REDIRECT_URL='/afterlogin'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -129,7 +131,7 @@ STATIC_ROOT = os.path.join(BASE_DIR,'assets')
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-LOGIN_REDIRECT_URL="home"
-LOGOUT_REDIRECT_URL="login"
+LOGIN_REDIRECT_URL="mybook:form"
+LOGOUT_REDIRECT_URL="mybook:login"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

@@ -1,44 +1,64 @@
 {% extends 'base.html' %}
-{% block content %}
 {%load static%}
+{% load widget_tweaks%}
+{% block content %}
+
 <section style="height: 1400px; border: 10px solid red;">
   <div class="container p-5 my-5 bg-dark text-white text-center ">CUSTEMER DEATAILS</div>
 
   <div class="container mt-5">
-    <form class="row g-3" method="POST" action="{ url 'view_authors' }">
+    <form class="row g-3" method="POST" id="load_customer_form" form-data-load-branches="load-customer-branches">
       {% csrf_token %}
                <div class="col-md-6">
-                <label for="customer" class="form-label">User Name  :</label>
-                <input type="text" class="form-control" name="customer">
+                <p>
+                  <label>Customer Name</label>
+                  {% render_field form.CName placeholder="" class="form-control" %}
+                </p>
+
               </div>
               <div class="col-md-6">
-                <label for="CName" class="form-label">Custemer Name  :</label>
-                <input type="text" class="form-control" name="CName">
+                <p>
+                  <label>Phone Number</label>
+                  {% render_field form.CPhone placeholder="" class="form-control" %}
+                </p>
               </div>    
               <div class="col-md-6">
-                <label for="CPhone" class="form-label">Phone Number :</label>
-                <input type="tel" name="CPhone" class="form-control" ><br>
+                <p>
+                  <label>EMail</label>
+                  {% render_field form.CMail placeholder="" class="form-control" %}
+                </p>
               </div>
               <div class="col-md-6">
-                <label for="CMail" class="form-label">email</label>
-                <input type="email" name="CMail" class="form-control"><br>
+                <p>
+                  <label>Address</label>
+                  {% render_field form.CAddress placeholder="" class="form-control" %}
+                </p>
               </div>
-              <div class="col-12">
-    
-                <label for="CAddress" class="form-label">Custemer Address</label>
-                <input type="text" name="CAddress" class="form-control"><br>
+             
+              <div class="col-md-6">
+                <select  name="form_district" id="form_districtID" class="form-control form-select">
+
+                <option disabled selected="true"> Select District</option>
+                {% for dist in districts%}
+
+                <option value="{{dist.id}}">{{dist.DICSTRINM}}</option>
+
+                {%endfor%}
+
+                </select>
               </div>
               <div class="col-md-6">
-                <label for="Ddate" class="form-label">District of Custemer :</label>
-                <input type="text" name="CDistric" class="form-control"><br>
-              </div>
-              <div class="col-md-6">
-                <label for="Ddate" class="form-label">Branch of Custemer :</label>
-                <input type="text" name="CBranch" class="form-control"><br>
+                <select name="form_branche" id="form_brancheID" class="form-control form-select" >
+                  <option disabled selected="true"> Select Branche</option>
+
+
+                </select>
               </div>
               <div class="col-md-4"> 
-                <label for="CZipcode" class="form-label">Zipcode :</label>
-                <input type="number" name="CZipcode" class="form-control"><br>
+                <p>
+                  <label>ZipCode</label>
+                  {% render_field form.CZipcode placeholder="" class="form-control" %}
+                </p>
               </div>
               <div class="col-md-4">
                 <label for="Ddate" class="form-label">Date of Delivery :</label>
@@ -58,4 +78,25 @@
             </form>
         </div>
 </section>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script>
+  $("#form_districtID").change(function () {
+    var url = $("#load_customer_form").attr("form-data-load-branches");  // get the url of the `load_courses` view
+    var districtId = $(this).val(); 
+    
+    console.log(districtId)// get the selected programming ID from the HTML input
+
+    $.ajax({                       // initialize an AJAX request
+      url: url,                    // set the url of the request (= localhost:8000/load-courses/)
+      data: {
+        'district': districtId       // add the programming id to the GET parameters
+      },
+      success: function (data) {   // `data` is the return of the `load_courses` view function
+        $("#form_brancheID").html(data);  // replace the contents of the course input with the data that came from the server
+      }
+    });
+
+  });
+</script>
 {% endblock content %}

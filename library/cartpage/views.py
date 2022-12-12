@@ -97,6 +97,9 @@ def checkout(request):
 
     branches=Branches.objects.all()
 
+
+    place=PurchasModel.objects.all().filter(customer=person).order_by('unique_purchase_id').first()
+
     if person:
         ct= cartlist.objects.get(customer=person,complete=False)
 
@@ -107,7 +110,7 @@ def checkout(request):
     else:
         c_items=[]
         ct={'get_cart_toal':0,'get_cart_items':0}
-    return render(request,"checkout.html",{'items':c_items,'order':ct, 'districts':districts,'branches':branches})
+    return render(request,"checkout.html",{'items':c_items,'order':ct, 'districts':districts,'branches':branches,'place':place})
 
 
 @login_required(login_url='login')
@@ -133,7 +136,12 @@ def processOrder(request):
 
         ct.save()
 
-        place=PurchasModel.objects.create(customer=person,order=ct, CName=data['form']['customer'], CMail=data['form']['CMail'], Bquatity=quantity,Total_Amount=data['form']['total'],  CAddress=data['shipping']['adrs'],CDistric=data['shipping']['CDistric'],CBranch=data['shipping']['CBranch'], CPhone=data['shipping']['CPhone'],CZipcode=data['shipping']['pincode'], BName=data['shipping']['BName'])
+        place=PurchasModel.objects.all().filter(customer=person).order_by('unique_purchase_id').first()
+
+        place.order=ct
+        place.Total_Amount=data['form']['total']
+        place.Bquatity=quantity
+
 
         place.save()
 

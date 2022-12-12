@@ -7,6 +7,8 @@ from django.contrib import messages
 from django.contrib.auth import login as auth_login,authenticate, logout
 from django.db.models import Q
 from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+import uuid
 
 from cartpage.models import PurchasModel,items
 # user hook pass 12345
@@ -14,8 +16,9 @@ from cartpage.models import PurchasModel,items
 
 
 def home(request):
+    home=True
     districts=District.objects.all()
-    return render(request, 'home.html',{'districts':districts})
+    return render(request, 'home.html',{'districts':districts,'home':home})
 
 def register(request):
     if request.method == 'POST':
@@ -52,12 +55,21 @@ def login(request):
         user = authenticate(username=user, password=password)
         
         if user is not None:
+
+            if not user.is_superuser:
             
-            auth_login(request,user)
-            return redirect('fillform')
+                auth_login(request,user)
+
+                return redirect('fillform')
     return render(request, 'registration/login.html')
-def logout(request):
-    return redirect('login')
+
+@login_required
+def Logout(request):
+    logout(request)
+
+    return redirect('home')
+
+
 def branch(request):
     brjs = District.objects.all()
     return render(request, 'branche.html', {'bjs': brjs})
@@ -67,17 +79,49 @@ def branches(request,area):
     return render(request, 'branche.html',{'brej':braju})
 
 def fillform(request):
+    districts=District.objects.all()
+    person = User.objects.get(id=request.user.id)
     if request.method == "POST":
+        district_id=request.POST.get('form_district')
+        branche_id=request.POST.get('form_branche')
+
+        date=request.POST.get('Ddate')
+        time=request.POST.get('Dtime')
+        
+        district=District.objects.get(id=district_id)
+        branche=Branches.objects.get(id=branche_id)
+        
         form = Shippingform(request.POST)
         if form.is_valid():
-            form.save()
+
+           
+
+            
+                customer_form=form.save(commit=False)
+                customer_form.CBranch=district.DICSTRINM
+                customer_form.CDistric=branche.BRANCHNM
+
+                customer_form.Ddate=date
+                customer_form.Dtime=time
+
+                customer_form.customer=person
+
+                customer_form.unique_purchase_id=str(uuid.uuid4())
+
+                customer_form.save()
+
+        return redirect('view_authors')
     else:
         form = Shippingform()
-    return render(request,'formview.html',{'frm':form})
+
+        
+
+    return render(request,'formview.html',{'form':form,'districts':districts})
 
 def view_authors(request):
+    author=True
     author_names = Author.objects.all()
-    return render(request, 'auther.html', {"author_names": author_names})
+    return render(request, 'auther.html', {"author_names": author_names,'author':author})
 
 def author_books(request, id):
     author_name = Author.objects.get(id=id)
@@ -114,16 +158,57 @@ def despatch(request):
 def load_branches(request):
     districtId=request.GET.get('district')
 
-    print(districtId)
 
     district=District.objects.get(id=districtId)
 
-    print(district)
 
     branches=Branches.objects.all().filter(DistricNM=district)
 
-    print(branches)
     return render(request,"branches.html", {'branches':branches})
+
+
+
+def form_load_branches(request):
+    districtId=request.GET.get('district')
+
+    district=District.objects.get(id=districtId)
+
+    branches=Branches.objects.all().filter(DistricNM=district)
+
+    
+    return render(request,"branches.html", {'branches':branches})
+
+def load_customer_branches(request):
+    districtId=request.GET.get('district')
+
+
+    district=District.objects.get(id=districtId)
+
+
+    branches=Branches.objects.all().filter(DistricNM=district)
+
+
+    return render(request,"branches.html", {'branches':branches})
+
+def delete_order(request,pk):
+    order=PurchasModel.objects.get(id=pk)
+
+    order.delete()
+
+    return redirect('view_authors')
+
+def form_load_books(request):
+    authorId=request.GET.get('author')
+
+    author=Author.objects.get(id=authorId)
+
+    books=Book.objects.all().filter(book_author=author)
+
+    
+    return render(request,"books.html", {'books':books})
+    
+
+
 
 
 

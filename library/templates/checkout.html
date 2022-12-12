@@ -49,14 +49,29 @@
 
     <div class="row">
         <div class="col-lg-6">
-            <div class="box-element" id="form-wrapper">
-                
-            </div>
 
-            <br>
+          
+           
+          
+
             
-            <div style="text-align:center" class="box-element hidden" id="payment-info">
+            <div style="text-align:center" class="box-element" id="payment-info">
+              <div style="font-weight: 700;margin-bottom:10px;">
+                Thank you for purchasing , please confirm your order.
+                
+              </div>
+              <p>
+                Date of Purchase: {{place.Ddate}}
+              </p>
+              <div style="margin-bottom: 20px;">
+                <a href="{% url 'view_authors'%}" style="display: inline-block;" class="btn btn-success">Try More</a>
+
+                <a href="{%url 'home'%}" style="display: inline-block;" class="btn btn-success">Go Home</a>
+
+              </div>
+              <div>
                 <button style="background-color:green;color:white;border-radius:4px;" id="make-payment">Place  Order</button>
+              </div>
 
             </div>
           
@@ -115,16 +130,7 @@
 
    var car_quant='{{order.get_cart_items}}'
 
-   form.addEventListener('submit',function(e){
-    e.preventDefault()
-    console.log('form submitted')
-
-    document.getElementById('form-button').classList.add('hidden')
-
-    document.getElementById('payment-info').classList.remove('hidden')
-
-   })
-
+   
    document.getElementById('make-payment').addEventListener('click',function(e){
     submitFormData()
    })
@@ -135,35 +141,13 @@
     console.log('payment button')
 
     var userFormData={
-      'customer':null,
-      'CMail':null,
       'total':total,
       'cart_quant':car_quant
 
     }
-    var shippingInfo={
-      'adrs':null,
-      'CBranch':null,
-      'CPhone':null,
-      'pincode':null,
-      'CDistric':null,
-      'BName':null,
+    
 
-      
-    }
-
-    userFormData.customer=form.customer.value
-    userFormData.CMail=form.CMail.value
-
-    shippingInfo.adrs=form.adrs.value
-    shippingInfo.CPhone=form.CPhone.value
-    shippingInfo.CBranch=form.CBranch.value
-    shippingInfo.pincode=form.pincode.value
-    shippingInfo.CDistric=form.CDistric.value
-    shippingInfo.BName=form.BName.value
-
-    console.log(userFormData)
-    console.log(shippingInfo)
+    
 
     var  url='/cart/process-order'
 
@@ -173,7 +157,7 @@
       'Content-Type':'application/json',
       'X-CSRFToken':csrftoken
     },
-    body:JSON.stringify({'form':userFormData, 'shipping':shippingInfo})
+    body:JSON.stringify({'form':userFormData})
    })
    .then((response) => response.json())
    .then((data)=>{

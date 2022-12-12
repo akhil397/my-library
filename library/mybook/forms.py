@@ -6,4 +6,5 @@ from cartpage import models
 class Shippingform(forms.ModelForm):
    class Meta:
        model = models.PurchasModel
-       fields = "__all__"
+       fields=['CName','CPhone','CMail','CAddress','CZipcode']
+

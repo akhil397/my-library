@@ -10,11 +10,13 @@
           <a class="nav-link active" aria-current="page" href="{% url 'home' %}">HOME</a>
         </li>
         
-        {% if user.is_authenticated %}
+        {% if user.is_authenticated  %}
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+          <a class="nav-link" href="{% url 'user-logout' %}">Logout</a>
         </li>
-        
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'despatch' %}">DESPACH</a>
+        </li>
         {% else %}
         <li class="nav-item">
           <a class="nav-link" href="{% url 'login' %}">LOGIN</a>
@@ -30,6 +32,8 @@
           <a class="nav-link active" aria-current="page" href="{% url 'branch' %}">BRANCH</a>
         </li> -->
         <li class="nav-item dropdown" >
+
+          {% if home%}
 
           <form action="" method="POST" id="load_districts" data-load-branches="load-branches">
           <!-- <a class="nav-link dropdown-toggle" href="{% url 'branch' %}" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -52,15 +56,79 @@
 
          </form>
 
+         {%elif author%}
+         <form action="" method="POST" id="load_authors" data-load-books="load-books">
+          <!-- <a class="nav-link dropdown-toggle" href="{% url 'branch' %}" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            BRANCH
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for ar in bjs %} 
+            <li><a class="dropdown-item" href="{% url 'branches' ar.id %}">{{ar.DICSTRINM}}</a></li>      
+            {% endfor %}
+          </ul> -->
+          <select  name="author" id="authorID" class="form-control form-select" >
+            <option disabled selected="true"> Select Author</option>
+            {%for author in author_names%}
+
+            <option value="{{author.id}}">{{author.author_name}}</option>
+            {%endfor%}
+          </select>
+
+          
+
+         </form>
+
+
+         {%else%}
+         <form action="" method="POST" id="load_districts" data-load-branches="form-load-branches">
+          <!-- <a class="nav-link dropdown-toggle" href="{% url 'branch' %}" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            BRANCH
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+            {% for ar in bjs %} 
+            <li><a class="dropdown-item" href="{% url 'branches' ar.id %}">{{ar.DICSTRINM}}</a></li>      
+            {% endfor %}
+          </ul> -->
+          <select  name="district" id="districtID" class="form-control form-select" >
+            <option disabled selected="true"> Select District</option>
+            {%for dct in districts%}
+
+            <option value="{{dct.id}}">{{dct.DICSTRINM}}</option>
+            {%endfor%}
+          </select>
+
+          
+
+         </form>
+         {%endif%}
+
         </li>
 
         <li class="nav-item dropdown" style="margin-left:20px;">
+          {%if home%}
           <select  name="branche"  id="brancheID" class="form-control form-select" >
             <option disabled selected="true"> Select Branche</option>
 
 
           </select>
+          {%elif author%}
+          <select  name="book"  id="bookID" class="form-control form-select" >
+            <option disabled selected="true"> Select Book</option>
+
+
+          </select>
+
+          {%else%}
+          <select  name="branche"  id="brancheID" class="form-control form-select" >
+            <option disabled selected="true"> Select Branche</option>
+
+
+          </select>
+          {%endif%}
+
         </li>
+
+        
         
       </ul>
       <form class="d-flex" action="{% url 'searching' %}">
@@ -73,6 +141,51 @@
 
 
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+{% if home%}
+    
+<script>
+  $("#districtID").change(function () {
+    var url = $("#load_districts").attr("data-load-branches");  // get the url of the `load_courses` view
+    var districtId = $(this).val(); 
+    
+    console.log(districtId)// get the selected programming ID from the HTML input
+
+    $.ajax({                       // initialize an AJAX request
+      url: url,                    // set the url of the request (= localhost:8000/load-courses/)
+      data: {
+        'district': districtId       // add the programming id to the GET parameters
+      },
+      success: function (data) {   // `data` is the return of the `load_courses` view function
+        $("#brancheID").html(data);  // replace the contents of the course input with the data that came from the server
+      }
+    });
+
+  });
+</script>
+    {%elif author%}
+
+    <script>
+      $("#authorID").change(function () {
+        var url = $("#load_authors").attr("data-load-books");  // get the url of the `load_courses` view
+        var authorId = $(this).val(); 
+        
+        console.log(authorId)// get the selected programming ID from the HTML input
+  
+        $.ajax({                       // initialize an AJAX request
+          url: url,                    // set the url of the request (= localhost:8000/load-courses/)
+          data: {
+            'author': authorId       // add the programming id to the GET parameters
+          },
+          success: function (data) {   // `data` is the return of the `load_courses` view function
+            $("#bookID").html(data);  // replace the contents of the course input with the data that came from the server
+          }
+        });
+  
+      });
+    </script>
+
+    {%else%}
     <script>
       $("#districtID").change(function () {
         var url = $("#load_districts").attr("data-load-branches");  // get the url of the `load_courses` view
@@ -92,3 +205,4 @@
   
       });
     </script>
+    {%endif%}
